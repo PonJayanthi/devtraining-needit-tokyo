@@ -7,10 +7,12 @@ on:
     branches:
       - main
 
-  # 2) Trigger on any pull request
+  # 2) Trigger on pull requests targeting main
   pull_request:
+    branches:
+      - main
 
-  # 3) Allow manual trigger from GitHub UI
+  # 3) Allow manual execution from Actions tab
   workflow_dispatch:
 
 concurrency:
