@@ -2,48 +2,43 @@
 name: CI Demo
 
 on:
-  # Run on every push and PR to any branch
+  # 1) Trigger on any push to main
   push:
+    branches:
+      - main
+
+  # 2) Trigger on any pull request
   pull_request:
 
-# Cancel previous runs of the same workflow on the same branch/PR
+  # 3) Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
 concurrency:
   group: ci-demo-${{ github.ref }}
   cancel-in-progress: true
 
-# Use minimal permissions for safety
 permissions:
   contents: read
 
 jobs:
   build-and-test:
     name: Build & Sanity Check
-    runs-on: ubuntu-latest  # Use Ubuntu runner
+    runs-on: ubuntu-latest
 
     steps:
-      # 1) Checkout repo code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2) Run a simple script (prints a message)
       - name: Say hello
         run: echo "GitHub Actions working!"
 
-      # 3) Additional step of your choice — list files
       - name: List repository files
         run: |
           echo "Current directory: $(pwd)"
-          echo "Git version:"
-          git --version
-          echo "Files in repo:"
           ls -la
 
-      # (Optional) Another useful step: show environment info
       - name: Environment info
         run: |
           echo "Runner OS: $RUNNER_OS"
-          echo "Default shell: $SHELL"
-          echo "Node version:"
-          node -v || echo "Node not installed"
           echo "Python version:"
-          python3 --version || echo "Python not installed"
+          python3 --version
